@@ -54,7 +54,7 @@ Vector KNNClassifier::distance_to_row(Vector row)
 double KNNClassifier::predict_row(Vector row)
 {
     Vector distances = this->distance_to_row(row);
-    
+
     // index = np.argsort(dist)
     // from https://stackoverflow.com/questions/1577475/c-sorting-and-keeping-track-of-indexes
     std::vector<int> closestIndex(distances.size());
@@ -63,7 +63,7 @@ double KNNClassifier::predict_row(Vector row)
     std::sort(closestIndex.begin(),
               closestIndex.end(),
               [&distances](size_t i1, size_t i2) {return distances[i1] < distances[i2];});
-    
+
     // closest = index[0:self.n_neighbors]
     // neighbors = [self.y[i] for i in closest]
     std::vector<double> closest_neighbors(this->neighbors);
@@ -72,13 +72,13 @@ double KNNClassifier::predict_row(Vector row)
         int index = closestIndex[i];
         closest_neighbors[i] = this->training_labels(index);
     }
-    
+
 
     //count = np.bincount(neighbors)
     //ret = np.argmax(count)
     double prediction = vote_popular(closest_neighbors);
-	
-	return prediction;
+
+    return prediction;
 }
 
 double KNNClassifier::vote_popular(std::vector<double> closest_neighbors)
