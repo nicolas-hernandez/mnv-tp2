@@ -83,7 +83,7 @@ double KNNClassifier::predict_row(Vector row)
 
 double KNNClassifier::vote_popular(std::vector<double> closest_neighbors)
 { 
-    double popular;
+    double popular = 0.0;
     int max_count = 0;
 
     for(double n1 : closest_neighbors)
