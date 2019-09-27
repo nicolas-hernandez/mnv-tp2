@@ -21,6 +21,7 @@ void KNNClassifier::fit(SparseMatrix X, Matrix y)
 Vector KNNClassifier::predict(SparseMatrix X)
 {
     // Creamos vector columna a devolver
+    // vector<bool> ret(X.rows());
     auto ret = Vector(X.rows());
 
     for (unsigned k = 0; k < X.rows(); ++k)
@@ -51,7 +52,7 @@ Vector KNNClassifier::distance_to_row(Vector row)
     return distances;
 }
 //TODO: replace std vectors with eigen ones
-double KNNClassifier::predict_row(Vector row)
+bool KNNClassifier::predict_row(Vector row)
 {
     Vector distances = this->distance_to_row(row);
 
@@ -66,7 +67,7 @@ double KNNClassifier::predict_row(Vector row)
 
     // closest = index[0:self.n_neighbors]
     // neighbors = [self.y[i] for i in closest]
-    std::vector<double> closest_neighbors(this->neighbors);
+    std::vector<bool> closest_neighbors(this->neighbors);
     for(int i = 0; i < this->neighbors; i++)
     {
         int index = closestIndex[i];
@@ -76,27 +77,13 @@ double KNNClassifier::predict_row(Vector row)
 
     //count = np.bincount(neighbors)
     //ret = np.argmax(count)
-    double prediction = vote_popular(closest_neighbors);
+    bool prediction = vote_popular(closest_neighbors);
 
     return prediction;
 }
 
-double KNNClassifier::vote_popular(std::vector<double> closest_neighbors)
+bool KNNClassifier::vote_popular(std::vector<bool> closest_neighbors)
 { 
-    double popular = 0.0;
-    int max_count = 0;
-
-    for(double n1 : closest_neighbors)
-    {
-        int count = 0;
-        for(double n2 : closest_neighbors)
-        {
-            if(n1 == n2) count++;
-        }
-        if(count > max_count)
-        {
-            popular = n1;
-        }
-    }
-    return popular;
+    unsigned int positive_reviews = std::count(closest_neighbors.begin(), closest_neighbors.end(), true);
+    return (positive_reviews > (closest_neighbors.size()/2));
 }
