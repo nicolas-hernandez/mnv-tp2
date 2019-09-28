@@ -1,4 +1,5 @@
 #include <algorithm>
+#include <numeric>
 //#include <chrono>
 #include <iostream>
 #include "knn.h"
