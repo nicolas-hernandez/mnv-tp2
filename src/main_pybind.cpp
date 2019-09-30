@@ -15,7 +15,6 @@
 namespace py = pybind11;
 
 int main(int argc, char** argv){
-    py::scoped_interpreter guard{};
     KNNClassifier knn(1);
     Matrix y_train(20, 1);
     SparseMatrix x_train(20,20);
@@ -26,14 +25,15 @@ int main(int argc, char** argv){
         y_train.coeffRef(i,0) = act;
         for(int j = 0; j<20; j++)
         {
-            x_train.coeffRef(i,j) = 10*i * j;
+            x_train.coeffRef(i,j) = 10*i + j;
         }
     }
 
     knn.fit(x_train, y_train);
     Vector y_pred = knn.predict(x_train);
 
-    py::print("Hola pybind!");
+    py::scoped_interpreter guard{};
+    py::print("Hello pybind!");
     py::print(y_train);
     py::print(y_pred);
 

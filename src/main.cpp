@@ -35,9 +35,9 @@ TEST_CASE( "Classifying training set returns the same labels", "[knn]" ) {
 
     knn.fit(x_train, y_train);
     Vector y_pred = knn.predict(x_train);
-    for(int i = 0; i < 20; i++) std::cout << y_pred(i) << " ";
-    std::cout << "\n";
-    for(int i = 0; i < 20; i++) std::cout << y_train(i) << " ";
-    std::cout << "\n";
-    REQUIRE(y_pred.coeff(0, 0) == y_train.coeff(0, 0));
+    for(int i = 0; i < 20; i++)
+    {
+        std::cout << "Testing row " << i <<  "\n";
+        REQUIRE(y_pred.coeff(i, 0) == y_train.coeff(i, 0));
+    }
 }

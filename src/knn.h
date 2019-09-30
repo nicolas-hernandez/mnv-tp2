@@ -11,7 +11,7 @@ public:
 
     Vector predict(SparseMatrix X);
 private:
-    Vector distance_to_row(Vector row);
+    Vector distances_to_row(Vector row);
     bool vote_popular(std::vector<bool> closest_neighbors);
     bool predict_row(Vector row);
     int neighbors;
