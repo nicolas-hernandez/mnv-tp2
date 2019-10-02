@@ -8,15 +8,6 @@
 #include "pca.h"
 #include "knn.h"
 #include "eigen.h"
-/*
-int main(int argc, char** argv){
-
-  std::cout << "Hola mundo!" << std::endl;
-
-  return 0;
-}*/
-
-
 
 TEST_CASE( "Classifying training set returns the same labels", "[knn]" ) {
     KNNClassifier knn(1);
@@ -37,7 +28,6 @@ TEST_CASE( "Classifying training set returns the same labels", "[knn]" ) {
     Vector y_pred = knn.predict(x_train);
     for(int i = 0; i < 20; i++)
     {
-        std::cout << "Testing row " << i <<  "\n";
         REQUIRE(y_pred.coeff(i, 0) == y_train.coeff(i, 0));
     }
 }

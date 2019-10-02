@@ -33,8 +33,9 @@ int main(int argc, char** argv){
     Vector y_pred = knn.predict(x_train);
 
     py::scoped_interpreter guard{};
-    py::print("Hello pybind!");
+    py::print("Training labels:");
     py::print(y_train);
+    py::print("Predictions:");
     py::print(y_pred);
 
     return 0;

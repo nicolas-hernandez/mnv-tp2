@@ -15,13 +15,6 @@ KNNClassifier::KNNClassifier(unsigned int n_neighbors)
 
 void KNNClassifier::fit(SparseMatrix X, Matrix y)
 {
-/*
-    std::cout << typeid(X).name() << '\n';
-    std::cout << typeid(y).name() << '\n';
-    std::cout << X.rows() << "x" << X.cols() << '\n';
-    std::cout << typeid(y).name() << '\n';
-    std::cout << y.rows() << "x" << y.cols() << '\n';
-*/  
     this->training_samples = X;
     this->training_labels = y;
 }
@@ -30,16 +23,11 @@ void KNNClassifier::fit(SparseMatrix X, Matrix y)
 Vector KNNClassifier::predict(SparseMatrix X)
 {
     // Creamos vector columna a devolver
-    // vector<bool> ret(X.rows());
     auto ret = Vector(X.rows());
 
     for (unsigned k = 0; k < X.rows(); ++k)
     {
-        cout << "Predicting row " << k << "\n";
-        auto pepe = this->predict_row(X.row(k));
-        cout << "Predicted: " << pepe << "expected: " << this->training_labels(k) << "\n";
-
-        ret(k) = pepe; 
+        ret(k) = this->predict_row(X.row(k)); 
     }
 
     return ret;
@@ -73,20 +61,15 @@ bool KNNClassifier::predict_row(Vector row)
     std::sort(closestIndex.begin(),
               closestIndex.end(),
               [&distances](size_t i1, size_t i2) {return distances[i1] < distances[i2];});
-    for(int elem : closestIndex) {
-        std::cout << elem << ", ";
-    }
-    std::cout << "\n";
+
     // closest = index[0:self.n_neighbors]
     // neighbors = [self.y[i] for i in closest]
     std::vector<bool> closest_neighbors(this->neighbors);
     for(int i = 0; i < this->neighbors; i++)
     {
         int index = closestIndex[i];
-        std::cout << "Considering index: "<<index;
         closest_neighbors[i] = this->training_labels(index);
     }
-
 
     //count = np.bincount(neighbors)
     //ret = np.argmax(count)
