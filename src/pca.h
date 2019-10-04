@@ -9,4 +9,7 @@ public:
 
     Eigen::MatrixXd transform(SparseMatrix X);
 private:
+    int components;
+    Eigen::MatrixXd covariance_matrix;
+    Eigen::MatrixXd eigenvectors;
 };
