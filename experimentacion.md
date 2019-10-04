@@ -17,7 +17,65 @@ En knn:
 
 En pca:
 - *alpha*: El numero que recibe PCA en inicializacion.(Tengo entendido que) Define cuantas componentes sobreviven al algoritmo. 
+- ¿?
 
 
 ## Extra
 (Del taller) ¿Cómo cambia la performance si usamos menos instancias de entrenamiento? linealmente exponencialmente etc.
+
+
+## Python del taller
+
+Fijo el k busco el alpha
+``` python
+accs = []
+alphas = list(range(1, 101, 3))
+for alpha in alphas:
+    # Ya V la tengo calculada
+    X_pca_train = X_train @ V[:, :alpha]
+    X_pca_test = X_test @ V[:, :alpha]
+    
+    ## Creo y entreno
+    clf = KNeighborsClassifier(n_neighbors=10)
+    clf.fit(X_pca_train, y_train)
+
+    # Predigo
+    y_pred = clf.predict(X_pca_test)
+
+    # Me fijo el accuracy
+    acc = accuracy_score(y_test, y_pred)
+    print("{:<2} ----> {:.3f}".format(alpha, acc))
+    accs.append(acc)
+```
+
+Buscando k y alpha a la vez
+``` python
+pruebas = []
+
+alphas = list(range(1, 91, 5))
+
+for k in [1, 3, 5, 7, 9, 11, 13]:
+    alphas = list(range(5, 91, 5))
+    
+    for alpha in alphas:
+        X_pca_train = X_train @ V[:, :alpha]
+        X_pca_test = X_test @ V[:, :alpha]
+
+        ## Creo y entreno
+        clf = KNeighborsClassifier(n_neighbors=k)
+        clf.fit(X_pca_train, y_train)
+
+        # Predigo
+        y_pred = clf.predict(X_pca_test)
+
+        # Me fijo el accuracy
+        acc = accuracy_score(y_test, y_pred)
+        print("k = {:<2} alpha = {:<2} ----> {:.3f}".format(k, alpha, acc))
+        
+        pruebas.append({
+            "k": k,
+            "alpha": alpha,
+            "acc": acc,
+        })
+    
+```
