@@ -21,7 +21,7 @@ En pca:
 
 
 ## Extra
-(Del taller) ¿Cómo cambia la performance si usamos menos instancias de entrenamiento? linealmente exponencialmente etc.
+(Del taller de knn) ¿Cómo cambia la performance si usamos menos instancias de entrenamiento? linealmente exponencialmente etc.
 
 
 ## Python del taller
@@ -49,6 +49,9 @@ for alpha in alphas:
 ```
 
 Buscando k y alpha a la vez
+Ahora, elegimos primero el k, luego el α...pero ¿y si había algún otro k que me de una mejor performance optimizando α?
+
+Solución: buscar conjuntamente k y α....aunque esto puede ser costoso!
 ``` python
 pruebas = []
 
