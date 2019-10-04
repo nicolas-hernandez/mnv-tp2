@@ -16,9 +16,12 @@ En knn:
 - (Nice to have) Variar el algoritmo para determinar cuales son los vecinos mas cercanos.
 
 En pca:
-- *alpha*: El numero que recibe PCA en inicializacion.(Tengo entendido que) Define cuantas componentes sobreviven al algoritmo. 
-- ¿?
+- *alpha*: El numero que recibe PCA en inicializacion.(Tengo entendido que) Define cuantas componentes sobreviven al algoritmo. Variar entre 50 y 400
+- Criterio de para del metodo de potencia
 
+Reducir el training set es aceptable si se mantienen buen representadasa las clases.
+
+Sacar palabras de las reseñas es posible, pero hay que hacer un buen analisis para justificarlo (sacar las palabras que son demasiado frecuentes y no aportan informacion)En este contexto palabras como articulos, pelicula y cine.
 
 ## Extra
 (Del taller de knn) ¿Cómo cambia la performance si usamos menos instancias de entrenamiento? linealmente exponencialmente etc.
@@ -82,3 +85,5 @@ for k in [1, 3, 5, 7, 9, 11, 13]:
         })
     
 ```
+
+
