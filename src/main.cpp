@@ -5,9 +5,11 @@
 #define CATCH_CONFIG_MAIN  // This tells Catch to provide a main() - only do this in one cpp file
 #include "catch.hpp"
 #include <iostream>
+#include <iomanip>
 #include "pca.h"
 #include "knn.h"
 #include "eigen.h"
+using namespace std;
 
 TEST_CASE( "Classifying training set returns the same labels", "[knn]" ) {
     KNNClassifier knn(1);
@@ -30,4 +32,25 @@ TEST_CASE( "Classifying training set returns the same labels", "[knn]" ) {
     {
         REQUIRE(y_pred.coeff(i, 0) == y_train.coeff(i, 0));
     }
+}
+
+TEST_CASE( "Transforming with PCA", "[pca]" ) {
+    PCA pca(5);
+    Matrix y_train(20, 1);
+    SparseMatrix x_train(20,20);
+    bool act = false;
+    for(int i = 0; i < 20; i++)
+    {
+        act = !act;
+        y_train.coeffRef(i,0) = !act;
+        for(int j = 0; j<20; j++)
+        {
+            x_train.coeffRef(i,j) = (double) 10*(i+2) + (j+1/33);
+			cout<<std::setprecision(5)<<x_train.coeffRef(i,j) << "\n";
+        }
+    }
+	std::cout << std::setprecision(5) << x_train << "\n";
+
+    pca.fit(x_train);
+	Eigen::MatrixXd train_new = pca.transform(x_train);
 }
