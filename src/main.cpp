@@ -46,10 +46,8 @@ TEST_CASE( "Transforming with PCA", "[pca]" ) {
         for(int j = 0; j<20; j++)
         {
             x_train.coeffRef(i,j) = (double) 10*(i+2) + (j+1/33);
-			cout<<std::setprecision(5)<<x_train.coeffRef(i,j) << "\n";
         }
     }
-	std::cout << std::setprecision(5) << x_train << "\n";
 
     pca.fit(x_train);
 	Eigen::MatrixXd train_new = pca.transform(x_train);

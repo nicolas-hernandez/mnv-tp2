@@ -7,57 +7,81 @@
 
 using namespace std;
 
-
 PCA::PCA(unsigned int n_components)
 {
-  this->components = n_components;
+	this->components = n_components;
 }
 
 void PCA::fit(Matrix X)
-{	
-  cout  << X <<"\n";
-  for(int c = 0; c < X.cols(); c++) {
-    Vector meanVector(X.rows());
-    int mean = X.col(c).mean();
-    for(int i = 0; i < X.rows(); i++) {
-      meanVector[i] = mean;
-    }
-    X.col(c) = X.col(c) - meanVector;
-  }
+{
+	for(int i = 0; i < X.cols(); i++) {
+		int n = X.rows();
+		Vector meanVector(n);
 
-  cout << X <<"\n";
-  Matrix covarianza = (1/(X.cols()-1)) * (X.transpose() * X);
-  cout << std::setprecision(5)<< covarianza << "\n";
+		// calculo la mediana
+		int mean = X.row(i).mean();
 
-  auto comp = [](pair<Matrix, double> aV1, pair<Matrix, double> aV2) {
-    return aV1.second > aV2.second;
-  };
-  priority_queue<pair<Matrix, double>, vector<pair<Matrix, double> >, decltype(comp)> queue(comp);
-  std::vector<Vector> autovectores;
-  
-  for (int i = 0; i < this->components; i++) {
-	Vector autovector = metodoDeLasPotencias(covarianza);
-	autovectores.push_back(autovector);
-	double lamda = encontrarAutovalor(autovector, covarianza);
-	Vector autovectorAux(autovector);
-	autovector = autovector * lamda;
-	covarianza = covarianza - (autovector.transpose() * autovectorAux);
-    
-	pair<Matrix, double> av = make_pair(autovector, lamda);
-    queue.push(av);
-  } 
-  
-  this->reduction = Matrix(autovectores.size(), this->components);
-  for(int ri = 0; ri < this->components; ri++) {
-    this->reduction.col(ri) = queue.top().first;
-    queue.pop();
-  }
+		for(int j = 0; j < X.rows(); j++) {
+			X(i, j) = (double)(X(i, j) - mean)/sqrt(n-1);
+		}
+	}
+
+	Matrix covarianza = X.transpose()*X;
+
+	auto comp = [](pair<Matrix, double> aV1, pair<Matrix, double> aV2) {
+		return aV1.second > aV2.second;
+	};
+
+	priority_queue<pair<Matrix, double>, vector<pair<Matrix, double> >, decltype(comp)> queue(comp);
+
+	std::vector<Vector> autovectores;
+
+	int dim= covarianza.rows();
+
+	for (int i = 0; i < this->components; i++) {
+		// INICIO METODO DE LAS POTENCIAS
+		Vector autovector(dim);
+		for (int w = 0; w < dim; w++) {
+			autovector[w] = rand() % 100 + 1.0;
+		}
+
+		double normaVieja = 0.0;
+		double norma = 1.0;
+
+		while ( abs( normaVieja - norma) > 0.0000001) {
+			normaVieja = autovector.norm();
+			Vector nuevoVector = covarianza * autovector;
+			nuevoVector*=1/(nuevoVector.norm());
+			autovector= nuevoVector;
+		}
+		// FIN METODO DE LAS POTENCIAS
+
+		autovectores.push_back(autovector);
+
+		//busco autovalor
+		Vector aux = covarianza*autovector;
+		double lambda = aux.norm();
+
+		Vector autovectorAux(autovector);
+		autovector = autovector * lambda;
+		covarianza = covarianza - (autovector.transpose() * autovectorAux);
+
+		pair<Matrix, double> av = make_pair(autovector, lambda);
+		queue.push(av);
+	}
+
+	this->reduction = Matrix(autovectores.size(), this->components);
+	for(int ri = 0; ri < this->components; ri++) {
+		this->reduction.col(ri) = queue.top().first;
+		queue.pop();
+	}
+
 }
 
 
 MatrixXd PCA::transform(SparseMatrix X)
 {
-  //MatrixXd reduction = this->eigenvectors.block(0,0,this->eigenvectors.rows(),this->components);
-  return X * this->reduction;
+	//MatrixXd reduction = this->eigenvectors.block(0,0,this->eigenvectors.rows(),this->components);
+	return X * this->reduction;
 }
 
