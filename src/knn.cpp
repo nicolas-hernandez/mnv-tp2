@@ -43,7 +43,8 @@ Vector KNNClassifier::distances_to_row(Vector row)
     auto distances = Vector(rows);
     for(int i = 0; i < rows; ++i)
     {
-        distances(i) = (this->training_samples.row(i) - row.transpose()).lpNorm<1>();
+		Eigen::ArrayXd aux = (this->training_samples.row(i) - row.transpose());
+        distances(i) = aux.abs().sum();
     }
 
     return distances;
