@@ -15,6 +15,6 @@ private:
     bool vote_popular(std::vector<bool> closest_neighbors);
     bool predict_row(Vector row);
     int neighbors;
-    SparseMatrix training_samples;
+    Matrix training_samples;
     Matrix training_labels;
 };
