@@ -10,9 +10,6 @@ pair<double, Vector> power_iteration(const Matrix& X, unsigned num_iter, double 
 {
     Vector b = Vector::Random(X.cols());
     double eigenvalue;
-    /***********************
-     * COMPLETAR CODIGO
-     **********************/
     double norma= 0;
     double normaActual = b.norm();
     b.normalize();
@@ -37,9 +34,14 @@ pair<Vector, Matrix> get_first_eigenvalues(const Matrix& X, unsigned num, unsign
     Matrix A(X);
     Vector eigvalues(num);
     Matrix eigvectors(A.rows(), num);
+	for(int i = 0; i < num; i++){
+		pair<double, Vector> av = power_iteration(A, num_iter, eps);
+		double lambda = av.first;
+		Vector v = av.second;
+		eigvectors(i) = v;
+		eigvalues(i) = lambda;
+		A = A - lambda*v*v.transpose();
+	}
 
-    /***********************
-     * COMPLETAR CODIGO
-     **********************/
     return make_pair(eigvalues, eigvectors);
 }
