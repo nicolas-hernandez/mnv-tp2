@@ -39,22 +39,8 @@ void PCA::fit(Matrix X)
 	int dim= covarianza.rows();
 
 	for (int i = 0; i < this->components; i++) {
-		// INICIO METODO DE LAS POTENCIAS
-		Vector autovector(dim);
-		for (int w = 0; w < dim; w++) {
-			autovector[w] = rand() % 100 + 1.0;
-		}
-
-		double normaVieja = 0.0;
-		double norma = 1.0;
-
-		while ( abs( normaVieja - norma) > 0.0000001) {
-			normaVieja = autovector.norm();
-			Vector nuevoVector = covarianza * autovector;
-			nuevoVector*=1/(nuevoVector.norm());
-			autovector= nuevoVector;
-		}
-		// FIN METODO DE LAS POTENCIAS
+        
+        pair autov = power_iteration(X, 100000, 0.0000001)
 
 		autovectores.push_back(autovector);
 

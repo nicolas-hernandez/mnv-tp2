@@ -13,6 +13,21 @@ pair<double, Vector> power_iteration(const Matrix& X, unsigned num_iter, double 
     /***********************
      * COMPLETAR CODIGO
      **********************/
+    double norma= 0;
+    double normaActual = b.norm();
+    b.normalize();
+    int iter=0;
+
+    while(abs(norma-normaActual<eps || iter <num_iter)){
+        b = X*b;
+
+        norma = normaActual;
+        normaActual=b.norm();
+        b.normalize();
+        iter++;
+
+    }
+    eigenvalue= b.transpose()*X*b;
 
     return make_pair(eigenvalue, b / b.norm());
 }
