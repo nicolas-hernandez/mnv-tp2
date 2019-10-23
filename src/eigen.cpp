@@ -2,7 +2,7 @@
 #include <chrono>
 #include <iostream>
 #include "eigen.h"
-
+#include <cmath>
 using namespace std;
 
 
@@ -15,7 +15,7 @@ pair<double, Vector> power_iteration(const Matrix& X, unsigned num_iter, double 
     b.normalize();
     int iter=0;
 
-    while(abs(norma-normaActual<eps || iter <num_iter)){
+    while(abs(norma-normaActual)<eps || iter <num_iter){
         b = X*b;
 
         norma = normaActual;
@@ -24,7 +24,8 @@ pair<double, Vector> power_iteration(const Matrix& X, unsigned num_iter, double 
         iter++;
 
     }
-    eigenvalue= b.transpose()*X*b / b.norm();
+    double lam = b.transpose()*X*b ;
+    eigenvalue= lam/ b.norm();
 
     return make_pair(eigenvalue, b / b.norm());
 }
@@ -34,14 +35,14 @@ pair<Vector, Matrix> get_first_eigenvalues(const Matrix& X, unsigned num, unsign
     Matrix A(X);
     Vector eigvalues(num);
     Matrix eigvectors(A.rows(), num);
-	for(int i = 0; i < num; i++){
-		pair<double, Vector> av = power_iteration(A, num_iter, eps);
-		double lambda = av.first;
-		Vector v = av.second;
-		eigvectors(i) = v;
-		eigvalues(i) = lambda;
-		A = A - lambda*v*v.transpose();
-	}
+    for(int i = 0; i < num; i++){
+        pair<double, Vector> av = power_iteration(A, num_iter, epsilon);
+        double lambda = av.first;
+        Vector v = av.second;
+        eigvectors.row(i) = v;
+        eigvalues(i) = lambda;
+        A = A - lambda*v*v.transpose();
+    }
 
     return make_pair(eigvalues, eigvectors);
 }

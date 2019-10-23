@@ -26,48 +26,16 @@ void PCA::fit(Matrix X)
 		}
 	}
 
-	Matrix covarianza = X.transpose()*X;
+	Matrix covarianza = X.transpose()*X/(X.rows()-1);
 
-	auto comp = [](pair<Matrix, double> aV1, pair<Matrix, double> aV2) {
-		return aV1.second > aV2.second;
-	};
-
-	priority_queue<pair<Matrix, double>, vector<pair<Matrix, double> >, decltype(comp)> queue(comp);
-
-	std::vector<Vector> autovectores;
-
-	int dim= covarianza.rows();
-
-	for (int i = 0; i < this->components; i++) {
-        
-        pair autov = power_iteration(X, 100000, 0.0000001)
-
-		autovectores.push_back(autovector);
-
-		//busco autovalor
-		Vector aux = covarianza*autovector;
-		double lambda = aux.norm();
-
-		Vector autovectorAux(autovector);
-		autovector = autovector * lambda;
-		covarianza = covarianza - (autovector.transpose() * autovectorAux);
-
-		pair<Matrix, double> av = make_pair(autovector, lambda);
-		queue.push(av);
-	}
-
-	this->reduction = Matrix(autovectores.size(), this->components);
-	for(int ri = 0; ri < this->components; ri++) {
-		this->reduction.col(ri) = queue.top().first;
-		queue.pop();
-	}
-
+	pair<Vector, Matrix> components = get_first_eigenvalues(X,this->components,10000,0.000001);
+	this->reduction = components.second.transpose();
 }
 
 
 MatrixXd PCA::transform(SparseMatrix X)
 {
-	//MatrixXd reduction = this->eigenvectors.block(0,0,this->eigenvectors.rows(),this->components);
-	return X * this->reduction;
+	Matrix A(X);
+	return this->reduction*A.transpose();
 }
 
