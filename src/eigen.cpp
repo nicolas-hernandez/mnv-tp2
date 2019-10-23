@@ -27,7 +27,7 @@ pair<double, Vector> power_iteration(const Matrix& X, unsigned num_iter, double 
         iter++;
 
     }
-    eigenvalue= b.transpose()*X*b;
+    eigenvalue= b.transpose()*X*b / b.norm();
 
     return make_pair(eigenvalue, b / b.norm());
 }
