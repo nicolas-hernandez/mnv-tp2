@@ -22,13 +22,13 @@ void PCA::fit(Matrix X)
 		int mean = X.row(i).mean();
 
 		for(int j = 0; j < X.rows(); j++) {
-			X(i, j) = (double)(X(i, j) - mean)/sqrt(n-1);
+			X(j, i) = (double)(X(j, i) - mean)/sqrt(n-1);
 		}
 	}
 
 	Matrix covarianza = X.transpose()*X/(X.rows()-1);
 
-	pair<Vector, Matrix> components = get_first_eigenvalues(X,this->components,10000,0.000001);
+	pair<Vector, Matrix> components = get_first_eigenvalues(X,this->components,10000,0.0001);
 	this->reduction = components.second.transpose();
 }
 

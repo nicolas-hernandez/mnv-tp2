@@ -22,10 +22,9 @@ pair<double, Vector> power_iteration(const Matrix& X, unsigned num_iter, double 
         normaActual=b.norm();
         b.normalize();
         iter++;
-
     }
-    double lam = b.transpose()*X*b ;
-    eigenvalue= lam/ b.norm();
+
+    eigenvalue= (X*b).norm() ;
 
     return make_pair(eigenvalue, b / b.norm());
 }
