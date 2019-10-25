@@ -20,7 +20,7 @@ void PCA::fit(Matrix X)
 		int mean = X.col(i).mean();
 
 		for(int j = 0; j < rows; j++) {
-			X(j, i) = (double)(X(j, i) - mean)/sqrt(n-1);
+			X(j, i) = (double)(X(j, i) - mean)/sqrt(rows-1);
 		}
 	}
 
