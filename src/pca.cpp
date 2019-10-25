@@ -14,21 +14,19 @@ PCA::PCA(unsigned int n_components)
 
 void PCA::fit(Matrix X)
 {
+	int rows = X.rows();
 	for(int i = 0; i < X.cols(); i++) {
-		int n = X.rows();
-		Vector meanVector(n);
-
 		// calculo la mediana
-		int mean = X.row(i).mean();
+		int mean = X.col(i).mean();
 
-		for(int j = 0; j < X.rows(); j++) {
+		for(int j = 0; j < rows; j++) {
 			X(j, i) = (double)(X(j, i) - mean)/sqrt(n-1);
 		}
 	}
 
-	Matrix covarianza = X.transpose()*X/(X.rows()-1);
+	Matrix covarianza = X.transpose()*X/(rows-1);
 
-	pair<Vector, Matrix> components = get_first_eigenvalues(X,this->components,10000,0.0001);
+	pair<Vector, Matrix> components = get_first_eigenvalues(X,this->components,1000,0.01);
 	this->reduction = components.second.transpose();
 }
 

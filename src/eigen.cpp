@@ -9,18 +9,24 @@ using namespace std;
 pair<double, Vector> power_iteration(const Matrix& X, unsigned num_iter, double eps)
 {
     Vector b = Vector::Random(X.cols());
+    Vector old = Vector::Zero(X.cols());
     double eigenvalue;
+
     double norma= 0;
     double normaActual = b.norm();
     b.normalize();
     int iter=0;
-
-    while(abs(norma-normaActual)<eps || iter <num_iter){
+    double dif = abs((old-b).norm());
+    while(dif < eps || iter <num_iter){
+        old = b;
         b = X*b;
 
         norma = normaActual;
         normaActual=b.norm();
+
         b.normalize();
+
+        dif = abs((old-b).norm());
         iter++;
     }
 
