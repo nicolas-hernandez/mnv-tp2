@@ -25,14 +25,18 @@ void PCA::fit(Matrix X)
 	}
 
 	Matrix covarianza = X.transpose()*X/(rows-1);
+	cout << "Cov matrix built\n";
 
-	pair<Vector, Matrix> components = get_first_eigenvalues(X,this->components,1000,0.01);
-	this->reduction = components.second.transpose();
+	pair<Vector, Matrix> components = get_first_eigenvalues(covarianza,this->components,1000,0.01);
+	cout << "Eigenvectors calculated\n";
+	
+	this->reduction = components.second;
 }
 
 
 MatrixXd PCA::transform(SparseMatrix X)
 {
+	cout << "Transforming\n";
 	Matrix A(X);
 	return this->reduction*A.transpose();
 }

@@ -37,18 +37,19 @@ TEST_CASE( "Classifying training set returns the same labels", "[knn]" ) {
 TEST_CASE( "Transforming with PCA", "[pca]" ) {
     PCA pca(5);
     Matrix y_train(20, 1);
-    SparseMatrix x_train(20,20);
+    SparseMatrix x_train(20,19);
     bool act = false;
     for(int i = 0; i < 20; i++)
     {
         act = !act;
         y_train.coeffRef(i,0) = !act;
-        for(int j = 0; j<20; j++)
+        for(int j = 0; j<19; j++)
         {
             x_train.coeffRef(i,j) = (double) 10*(i+2) + (j+1/33);
         }
     }
+    cout << "Matrix built\n";
 
     pca.fit(x_train);
-	Eigen::MatrixXd train_new = pca.transform(x_train);
+    Eigen::MatrixXd train_new = pca.transform(x_train);
 }
